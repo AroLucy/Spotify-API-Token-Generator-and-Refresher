@@ -135,6 +135,21 @@ function refreshSpotifyToken() {
 			};
 			let DataTW = JSON.stringify(accessToken);
 			fs.writeFileSync('Auth.json', DataTW);
+
+			var today = new Date();
+			var timeM = today.getMinutes() + 30;
+			var timeH = today.getHours();
+			if (timeM >= 60) {
+				timeM = timeM - 60;
+				timeH = timeH
+			}
+			if (timeH == 24) {
+				timeH = 0
+			}
+			timeM = (timeM < 10) ? "0" + timeM : timeM
+
+			console.log("Will refresh next at" + timeH + ":" + timeM);
+
 		},
 		function(err) {
 			console.log('Could not refresh access token');
@@ -143,5 +158,5 @@ function refreshSpotifyToken() {
 };
 app.listen(8888, () => {
 	refreshSpotifyToken();
-	setInterval(refreshSpotifyToken, 1000*10);
+	setInterval(refreshSpotifyToken, 1000 * 60 * 30);
 })
